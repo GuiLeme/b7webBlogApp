@@ -1,0 +1,9 @@
+{{>header}}
+
+<h1>{{post.title}}</h1>
+<p>{{post.body}}</p>
+<ul>
+    {{#post.tags}}
+    <li>{{.}}</li>
+    {{/post.tags}}
+</ul>

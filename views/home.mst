@@ -1,0 +1,10 @@
+{{>header}}
+<h1>Página home {{teste}}</h1>
+<p class="aqui">Seja muito bem vindo</p>
+
+{{#posts}}
+    <h3><a href="/post/{{slug}}">{{title}}</a></h3>
+    <p>{{body}}</p>
+    <a href="/post/{{slug}}/edit">[Editar]</a>
+    <hr>
+{{/posts}}
