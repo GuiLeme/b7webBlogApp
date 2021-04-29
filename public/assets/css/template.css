@@ -1,5 +1,16 @@
-.qualquercoisa {
-    display: block;
-    flex: auto;
-    margin: 12px;
+.selected {
+    color: red;
+}
+
+.title{
+    color: green;
+}
+
+a{
+    text-decoration: none;
+    color: #115599;
+}
+
+a:hover{
+    text-decoration: underline;
 }

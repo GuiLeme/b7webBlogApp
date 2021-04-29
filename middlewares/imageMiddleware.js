@@ -6,7 +6,8 @@ const multerOptions = {
     storage: multer.memoryStorage(),
     fileFilter: (req, file, next) => {
         const allowed = ['image/jpeg', 'image/jpg', 'image/png']
-        if (allowed.includes(file.minitype)) {
+        if (allowed.includes(file.mimetype)) {
+            
             next(null,true)
         } else{
             next({message: "arquivo não suportável"}, false)
@@ -15,18 +16,13 @@ const multerOptions = {
 }
 exports.upload = multer(multerOptions).single('photo')
 
-exports.teste = (req, res, next) => {
-    console.log('Aqui entrou')
-    next()
-}
-
 exports.resize = async (req, res, next) => {
     if (!req.file) {
         next()
         return
     }
 
-    const ext = req.file.minitype.split('/')[1]
+    const ext = req.file.mimetype.split('/')[1]
     let filename = `${uuid.v4()}.${ext}`
 
     req.body.photo = filename

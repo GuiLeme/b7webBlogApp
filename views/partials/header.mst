@@ -13,7 +13,7 @@
     {{/pageTitle}}
 </head>
 <body>
-    <h1>Cabeçalho</h1>
+    <h1 class="title">Cabeçalho</h1>
     <hr>
     <ul>
         {{#h.menu}}

@@ -16,6 +16,7 @@ exports.addAction = async(req, res) => {
         await post.save()
     }catch(error){
         req.flash('error', 'Erro: '+error.message)
+        //console.log(req.body)
         return res.redirect('/post/add')
     }
 
@@ -56,4 +57,18 @@ exports.view = async(req, res) => {
 
 
     res.render('view', {post})
+}
+
+exports.remove = async (req, res) => {
+    try{
+        await Post.deleteOne({slug: req.params.slug})
+        req.flash('success', "Post Deletado com sucesso")
+
+        res.redirect('/')
+    }catch(e){
+        req.flash('error', "Não consegui deletar o post: " + e.message)
+        redirect('/')
+    }
+    
+    
 }

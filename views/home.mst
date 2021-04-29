@@ -2,9 +2,25 @@
 <h1>Página home {{teste}}</h1>
 <p class="aqui">Seja muito bem vindo</p>
 
+<h2>Quer ver os posts separados por tags?</h2>
+
+
+<div style="display: flex; width: 100%; justify-content: center;">
+    {{#tags}}
+        <div style="margin-left: 20px; border-right: 1px solid #000; padding-right: 20px;">
+            <a class="{{class}}" href="/?t={{_id}}">{{_id}} ({{count}})</a></div>
+    {{/tags}}
+</div>
+<br><br>
+<hr>
+<br><br>
 {{#posts}}
+    {{#photo}}
+        <img src="/media/{{photo}}" alt="" style="max-width: 100px;">
+    {{/photo}}
     <h3><a href="/post/{{slug}}">{{title}}</a></h3>
     <p>{{body}}</p>
     <a href="/post/{{slug}}/edit">[Editar]</a>
+    <a href="/post/{{slug}}/delete">[Deletar]</a>
     <hr>
 {{/posts}}
