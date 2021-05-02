@@ -2,6 +2,8 @@ const mongoose = require("mongoose")
 mongoose.Promise = global.Promise
 const slug = require('slug')
 
+const objectId = mongoose.Schema.Types.ObjectId
+
 const postSchema = new mongoose.Schema({
     photo: String,
     title: {
@@ -15,7 +17,8 @@ const postSchema = new mongoose.Schema({
         trim: true,
         required: "O post precisa ter um corpo"
     },
-    tags: [String]
+    tags: [String],
+    author: objectId
 })
 
 postSchema.pre('save', async function(next){
@@ -41,5 +44,24 @@ postSchema.statics.getTagsList = function() {
         { $sort: { count:-1 } }
     ])
 }
+postSchema.statics.findPosts = function(filters = {}) {
+    return this.aggregate([
+        {$match: filters},
+        {$lookup: {
+            from: "users",
+            let: {'author': "$author"}, 
+            pipeline:  [
+                {$match: {$expr: {$eq: ['$$author', "$_id" ]}}},
+                {$limit: 1}
+            ],
+            as: 'author'
+        }},
+        { $addFields: {
+            "author": {$arrayElemAt: ['$author', 0]}
+        }}
+    ])
+}
+
 
 module.exports = mongoose.model("Post", postSchema)
+

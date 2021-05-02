@@ -9,11 +9,12 @@ exports.index = async (req, res) => {
         tag: ''
     }
     
+
     objeto.tag = req.query.t
     let postFilter = (objeto.tag != undefined ? {tags: objeto.tag}: {})
     
     const tagsPromise = Post.getTagsList()
-    const postsPromise = Post.find(postFilter)
+    const postsPromise = Post.findPosts(postFilter)
     
     const [tags, posts] = await Promise.all([tagsPromise, postsPromise])
 
@@ -22,6 +23,12 @@ exports.index = async (req, res) => {
         if (tags[i]._id==objeto.tag){
             tags[i].class="selected"
         }
+    }
+
+    if(req.isAuthenticated()){
+        posts.map(item => {
+            item.mostrar = (JSON.stringify(item.author._id) == JSON.stringify(res.locals.user._id))
+        })
     }
 
     objeto.tags = tags

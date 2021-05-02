@@ -20,7 +20,12 @@
     {{/photo}}
     <h3><a href="/post/{{slug}}">{{title}}</a></h3>
     <p>{{body}}</p>
-    <a href="/post/{{slug}}/edit">[Editar]</a>
-    <a href="/post/{{slug}}/delete">[Deletar]</a>
+    {{#user}}
+        {{#mostrar}}
+            <a href="/post/{{slug}}/edit">[Editar]</a>
+            <a href="/post/{{slug}}/delete">[Deletar]</a>
+        {{/mostrar}}
+    {{/user}}
+    <p>Autor: {{author.name}}</p>
     <hr>
 {{/posts}}

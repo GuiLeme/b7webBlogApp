@@ -1,0 +1,11 @@
+{{>header}}
+
+<h1>Esqueci a minha senha</h1>
+
+<form action="" method="POST">
+    <label for="">
+        Email:
+        <input type="email" name="email">
+    </label><br><br>
+    <button>Entrar</button>
+</form>

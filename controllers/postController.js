@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { stringify } = require('uuid')
 const Post = mongoose.model('Post') 
 
 exports.add = (req, res) => {
@@ -7,6 +8,8 @@ exports.add = (req, res) => {
 
 exports.addAction = async(req, res) => {
     req.body.tags = req.body.tags.split(',').map(t => t.trim())
+    req.body.author = req.user._id
+    
     const post = new Post(req.body)
     try{
         if (!req.body.title || !req.body.body){
@@ -16,7 +19,6 @@ exports.addAction = async(req, res) => {
         await post.save()
     }catch(error){
         req.flash('error', 'Erro: '+error.message)
-        //console.log(req.body)
         return res.redirect('/post/add')
     }
 
@@ -71,4 +73,15 @@ exports.remove = async (req, res) => {
     }
     
     
+}
+
+exports.canEdit = async (req, res, next) => {
+    const post = await Post.findOne({slug: req.params.slug})
+    if ((JSON.stringify(post.author) != JSON.stringify(req.user._id))) {
+        req.flash('error', 'Você não é o autor desse post')
+        res.redirect('/')
+        return
+    }
+    next()
+
 }

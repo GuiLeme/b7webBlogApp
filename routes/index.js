@@ -5,25 +5,47 @@ const postController = require('../controllers/postController')
 
 const imageMiddleware = require('../middlewares/imageMiddleware')
 
+const authMiddleware = require('../middlewares/authMiddleware')
+
 
 const router = express.Router()
 router.get('/', homeController.index)
-router.get('/users/login', userController.login)
-router.get('/users/register', userController.register)
 
-router.get('/post/add', postController.add)
+router.get('/users/login', userController.login)
+router.post('/users/login', userController.loginAction)
+
+router.get('/users/logout', userController.logout)
+
+router.get('/users/forget', userController.forget)
+router.post('/users/forget', userController.forgetAction)
+
+router.get('/users/reset/:token', userController.forgetToken)
+router.post('/users/reset/:token',userController.forgetTokenAction)
+
+router.get('/profile',authMiddleware.isLogged , userController.profile)
+router.post('/profile', authMiddleware.isLogged , userController.profileAction)
+
+router.post('/profile/password', authMiddleware.isLogged, authMiddleware.changePassword)
+
+router.get('/users/register', userController.register)
+router.post('/users/register', userController.registerAction)
+
+router.get('/post/add', authMiddleware.isLogged, postController.add)
 router.post('/post/add',
+    authMiddleware.isLogged,
     imageMiddleware.upload,
     imageMiddleware.resize,    
     postController.addAction)
 
-router.get('/post/:slug/edit', postController.edit)
-router.post('/post/:slug/edit', 
+router.get('/post/:slug/edit', authMiddleware.isLogged, postController.canEdit, postController.edit)
+router.post('/post/:slug/edit',
+    authMiddleware.isLogged,
+    postController.canEdit,
     imageMiddleware.upload,
     imageMiddleware.resize,
     postController.editAction)
 
-router.get('/post/:slug/delete', postController.remove)
+router.get('/post/:slug/delete', authMiddleware.isLogged, postController.remove)
 
 router.get('/post/:slug', postController.view)
 
